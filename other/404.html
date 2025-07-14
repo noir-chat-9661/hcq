@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="loader.css" />
+	</head>
+
+	<body>
+		<div id="loading">
+			<div class="loading-wrapper">
+				<div class="loader"></div>
+			</div>
+			<div class="title"><span></span></div>
+		</div>
+	</body>
+	<script>
+		const path = window.location.pathname;
+
+		window.location = `/?path=${path}`;
+	</script>
+</html>
