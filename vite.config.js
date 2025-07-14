@@ -14,4 +14,9 @@ export default defineConfig({
 			"@": path.resolve(__dirname, "./src"),
 		},
 	},
+	build: {
+		minify: "terser",
+		cssMinify: "lightningcss",
+		chunkSizeWarningLimit: 1000,
+	},
 });

@@ -6,7 +6,6 @@ import {
 	AccordionTrigger,
 	AccordionContent,
 } from "@/components/ui/accordion";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
 	Breadcrumb,
