@@ -5,21 +5,12 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="/src/index.css" />
 		<title>ヒマクエ補助ツール</title>
+		<script src="http://unpkg.com/prettier@3.5.3/standalone.js"></script>
+		<script src="http://unpkg.com/prettier@3.5.3/plugins/babel.js"></script>
+		<script src="http://unpkg.com/prettier@3.5.3/plugins/estree.js"></script>
 	</head>
 	<body>
-		<div id="root" style="display: none"></div>
+		<div id="root"></div>
 		<script type="module" src="/src/main.jsx"></script>
-		<div id="loading">
-			<div class="loading-wrapper">
-				<div class="loader"></div>
-			</div>
-			<div class="title"><span></span></div>
-		</div>
 	</body>
-	<script>
-		window.onload = () => {
-			document.getElementById("root").style.display = "block";
-			document.getElementById("loading").style.display = "none";
-		};
-	</script>
 </html>

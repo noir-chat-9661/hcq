@@ -437,12 +437,12 @@ function CharaCalc() {
 			toast.error("不正なJSON形式です。");
 			return;
 		}
-		const pointData = jobPoint.flat()
+		const pointData = jobPoint.flat().map(Number)
 		if (pointData.length !== skillData.length) {
 			toast.error("不正なJSON形式です。");
 			return;
 		}
-		if (pointData.reduce((a, b) => a + b, 0) > parseInt(charaData.charalevel) + 4) {
+		if (pointData.map((n, m) => (skillData[m].point + 1) * n * (n + 1) / 2 + skillData[m].level).reduce((a, b) => a + b, 0) > parseInt(charaData.charalevel) + 4) {
 			toast.error(`技のポイントの合計値が許容量(${parseInt(charaData.charalevel) + 4})を超過しています。`);
 			return;
 		}

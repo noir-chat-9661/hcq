@@ -22,7 +22,6 @@ const TopPage = () => {
 	const [copied, setCopied] = useState(new Array(codes.length).fill(0));
 
 	const handleCopyCode = (index) => {
-		console.log(copied)
 		navigator.clipboard.writeText(codes[index]).then(() => {
 			if (copied[index]) clearTimeout(copied[index]);
 			setCopied(copied.toSpliced(index, 1, setTimeout(() => setCopied(copied.toSpliced(index, 1, 0)), 2000)));
@@ -138,7 +137,7 @@ const TopPage = () => {
 									<p>専用ブラウザでアドオンを起動する場合</p>
 									<Button className="m-1 h-10 p-3">
 										<Link
-											to="https://addon.pjeita.top/introduce/"
+											to="https://addon.pjeita.top/"
 											target="_blank"
 										>
 											<SquareArrowOutUpRight className="mr-2 inline-block align-sub" />
