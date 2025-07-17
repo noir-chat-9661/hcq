@@ -6,8 +6,20 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>loading</title>
 		<script>
-			sessionStorage.setItem("path", location.pathname);
-			location.replace("./");
+			(() => {
+				let path = location.pathname;
+				// /characalc/:recipeIdのrecipeIdをsessionStorageに保存、その後、/characalcにリダイレクト
+				if (path.match(/^\/chara_calc/)) {
+					path = path.replace("/chara_calc", "/characalc");
+				}
+				if (path.match(/^\/characalc\/\S+/)) {
+					path = "/characalc";
+					const recipeId = path.split("/")[2];
+					sessionStorage.setItem("recipeId", recipeId);
+				}
+				sessionStorage.setItem("path", location.pathname);
+				location.replace("./");
+			})();
 		</script>
 	</head>
 </html>
