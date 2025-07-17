@@ -15,6 +15,7 @@
 				if (path.match(/^\/characalc\/[a-zA-Z0-9]+/)) {
 					path = "/characalc";
 					const recipeId = path.split("/")[2];
+					sessionStorage.setItem("debug", path);
 					sessionStorage.setItem("recipeId", recipeId);
 				}
 				sessionStorage.setItem("path", path);
