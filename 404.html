@@ -13,10 +13,9 @@
 					path = path.replace("/chara_calc", "/characalc");
 				}
 				if (path.match(/^\/characalc\/[a-zA-Z0-9]+/)) {
-					path = "/characalc";
 					const recipeId = path.split("/")[2];
-					sessionStorage.setItem("debug", path);
 					sessionStorage.setItem("recipeId", recipeId);
+					path = "/characalc";
 				}
 				sessionStorage.setItem("path", path);
 				location.replace("/");
