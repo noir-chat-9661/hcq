@@ -17,7 +17,7 @@
 					const recipeId = path.split("/")[2];
 					sessionStorage.setItem("recipeId", recipeId);
 				}
-				sessionStorage.setItem("path", location.pathname);
+				sessionStorage.setItem("path", path);
 				location.replace("/");
 			})();
 		</script>
