@@ -40,6 +40,9 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { jobs, weapons, options, skills, defaultCharaData, charaDataTypes } from "@/constants/";
 
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useCalc } from "@/hooks/use-calc";
+
+const version = "6.1.0";
 
 function CharaCalc() {
 	const levels = ["-", "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ"];
@@ -73,6 +76,8 @@ function CharaCalc() {
 	});
 	const [charaData, setCharaData] = useState(defaultCharaData)
 	const [inputJson, setInputJson] = useState("");
+	const [status, setStatus] = useState({});
+	const calcStatus = useCalc();
 
 	useEffect(() => {
 		setSkillPoints(
@@ -105,16 +110,69 @@ function CharaCalc() {
 				setNextMode(mode);
 			}
 		} else {
+			if (nextMode === "data") setStatus((charaData.charalevel + 4 < skillPoints.reduce((a, b) => a + b, 0) || charaData.characterType == -1) ? {} : calcStatus(skillPoints, charaData));
 			setMode(nextMode);
 		}
 	}, [nextMode]);
+
 	useEffect(() => {
 		if (currentSkill === null) return;
+
 	}, [currentSkill])
+
+	useEffect(() => {
+		const fetchRecipe = async (id) => {
+			try {
+				const { info, error } = await fetch("https://api.pjeita.top/hcqcalc", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ id }),
+				}).then(res => res.json());
+				if (error == 4) {
+					toast.error("レシピが見つかりませんでした。");
+					return;
+				}
+				const { jobPoint, charaData } = info;
+				const pointData = jobPoint.flat().map(Number)
+				setSkillData(prevData => {
+					return prevData.map(skill => {
+						return { ...skill, level: parseInt(pointData[skill.id]) || 0 };
+					});
+				});
+				
+				const d = { ...defaultCharaData };
+				Object.entries(charaData).forEach(([key, value]) => {
+					let v = value;
+					if (!(key in charaDataTypes)) return;
+					if (typeof v != charaDataTypes[key]) {
+						// 型が一致しない場合は変換
+						if (charaDataTypes[key] === "number") {
+							v = parseInt(value);
+						} else if (charaDataTypes[key] === "string") {
+							v = String(value);
+						}
+					}
+					d[key] = v;
+				});
+				setCharaData(d);
+				toast.success("IDからレシピを取得しました。");
+			} catch {
+				toast.error("レシピの取得に失敗しました。");
+			}
+		}
+		if (sessionStorage.getItem("recipeId")) {
+			const id = sessionStorage.getItem("recipeId");
+			sessionStorage.removeItem("recipeId");
+			fetchRecipe(id);
+		}
+	}, []);
 
 	const setCharacterData = (k, v, a = false) => {
 		if (!(k in charaData)) return;
 		const d = {...charaData };
+		let s = skillPoints;
 		if (k === "characterType" && charaData.characterType != v) {
 			d.hiden = 0;
 
@@ -122,17 +180,15 @@ function CharaCalc() {
 			if (!defaultSkill?.level && v != -1) {
 				levelChange(defaultSkill.id, 1);
 			} else {
-				setSkillPoints(
-					(skillPoints) => 
-						skillPoints.map((_, index) => {
-								const points = skillData
-									.filter(skill => skill.jobid === index)
-									.reduce((sum, skill) => sum + (skill.level * (skill.level + 1) / 2 * (skill.point + 1)), 0)
-								if (points < 5 && charaData.characterType === index) return 5;
-								return points;
-							}
-						)
+				s = skillPoints.map((_, index) => {
+						const points = skillData
+							.filter(skill => skill.jobid === index)
+							.reduce((sum, skill) => sum + (skill.level * (skill.level + 1) / 2 * (skill.point + 1)), 0)
+						if (points < 5 && charaData.characterType === index) return 5;
+						return points;
+					}
 				)
+				setSkillPoints(s);
 			}
 		}
 		if (k === "weapon" && k.weapon != v) {
@@ -215,7 +271,10 @@ function CharaCalc() {
 			d[k] = v
 		};
 		setCharaData(d);
+		setStatus((d.charalevel + 4 < skillPoints.reduce((a, b) => a + b, 0) || d.characterType == -1) ? {} : calcStatus(s, d));
 	}
+
+	
 
 	const calc = () => {
 		if (charaData.charalevel + 4 < skillPoints.reduce((a, b) => a + b, 0)) {
@@ -242,9 +301,6 @@ function CharaCalc() {
 				toast.warning("武器の鍛冶の値の合計は99以下です。");
 			}
 		}
-		const status = {...jobs[charaData.characterType].status[0]};
-		status.SP = 1000;
-		Object.entries(jobs[charaData.characterType].status[1]).forEach(d => status[d[0]] += Math.floor(d[1] * charaData.charalevel));
 		let points = [...skillPoints]
 		if (points.reduce((a, b) => a + b, 0) < charaData.charalevel + 4) {
 			points = points.map((p, i) => {
@@ -254,85 +310,7 @@ function CharaCalc() {
 				return p;
 			})
 		}
-		jobs.map(j => j.status[2]).forEach((d, i) => 
-			Object.entries(d).forEach(s => status[s[0]] += Math.floor(s[1] * points[i]))
-		);
-
-		if (charaData.characterType == 0 && charaData.hiden == 3) {
-			status.as += 5
-		} else if (charaData.characterType == 3 && charaData.hiden == 1) {
-			status.ms += 3
-		} else if (charaData.characterType == 5 && charaData.hiden == 1) {
-			status.as += 3
-		} else if (charaData.characterType == 6 && charaData.hiden == 1) {
-			status.SP += 400
-		}
-
-		switch (charaData.weapon) {
-			case 38:
-				status.SP += 1000;
-				status.def += 100;
-				break;
-			case 39:
-				status.pow += 100;
-				break;
-			case 40:
-				status.tec += 100;
-				status.SP += 300;
-				break;
-			case 41:
-				status.def += 100;
-				status.SP += 500;
-				break;
-			case 42:
-				status.ms += 10;
-				break;
-			case 43:
-				status.tec -= 200;
-				break;
-			case 44:
-				status.ms += 3;
-				status.as += 6;
-				break;
-			case 45:
-				status.tec += 100;
-				status.SP -= 200;
-				break;
-			case 46:
-				status.tec += 100;
-				status.SP += 500;
-				break;
-		}
-
-		if (charaData.weapon != -1) {
-			for (let i = 0; i < 3; i++) {
-				const option = options[0].find(o => o.id === charaData[`weaponOption${i}`])
-				if (option.addstatus) option.addstatus.forEach(s => {
-					status[s.type] += s.value;
-				});
-			}			
-		}
-		for (let i = 3; i < 6; i++) {
-			if (charaData[`weaponOption${i}`] === -1) continue;
-			const option = options[Math.floor(i / 3)].find(o => o.id === charaData[`weaponOption${i}`])
-			if (option.addstatus) option.addstatus.forEach(s => {
-				status[s.type] += s.value;
-			})
-		}
-		status.pow += charaData.bonusPow;
-		status.def += charaData.bonusDef;
-		status.tec += charaData.bonusTec;
-		if (charaData.weapon != -1) {
-			status.pow = Math.floor(status.pow * (1 + (charaData.weaponPow + charaData.weaponPowPlus) / 100));
-			status.def = Math.floor(status.def * (1 + (charaData.weaponDef + charaData.weaponDefPlus) / 100));
-			status.tec = Math.floor(status.tec * (1 + (charaData.weaponTec + charaData.weaponTecPlus) / 100));
-		}
-
-		status.HP += Math.floor(status.def / 10);
-
-		if (status.pow < 0) status.pow = 1;
-		if (status.def < 0) status.def = 1;
-		if (status.tec < 0) status.tec = 1;
+		const status = calcStatus(points, charaData);
 		const randomName = () => {
 			const nametable = [
 				['ロドリゲス', 'ビーモス', 'マンティス', 'トムソン', 'トランザム', 'ビッグナム', 'ゴンザレス', 'トーマス', 'ウィンビン', 'フローレン', 'エルダス', 'バゼルコ', 'ゴルバッチョ', 'ジャガー', 'グレート', 'マーフィー', 'デストロヤー', 'ダイヤモンド', 'エドワード', 'モンゴリアン', 'ドレイク', 'ブライアン', 'ハロルド', 'マーキュリー', 'ディオス', 'ジャッカル', 'ロジャー', 'ロバーツ', 'ダスティン', 'バレンタイン', 'ウィリアム', 'ジャイアント', 'スターマイン', 'モンスーン', 'エルリック', 'ヴォックス', 'ベーカー', 'ベネット', 'ロベルト', 'アンジェロ', 'マグナム', 'アグトゥス', 'ドンキホーテ', 'ダーマルセ', 'ビーコフ', 'ミートボール', 'バロン', 'ピーターソン', 'ジョナサン', 'ロコフスキー', 'マンデル', 'ビビタス', 'リチャード', 'ライトニング', 'ジャック', 'ライジング', 'ノーブル', 'ダイナマイト', 'アリオン', 'アルデバラン', 'イーシス', 'ペテルギウス', 'デーモン', 'ビッグバン', 'エリザベス', 'ダークネス', 'ミトス', 'アサシン', 'クリス', 'アレックス'],
@@ -442,7 +420,7 @@ function CharaCalc() {
 			toast.error("不正なJSON形式です。");
 			return;
 		}
-		if (pointData.map((n, m) => (skillData[m].point + 1) * n * (n + 1) / 2 + skillData[m].level).reduce((a, b) => a + b, 0) > parseInt(charaData.charalevel) + 4) {
+		if (pointData.map((n, m) => (skillData[m].point + 1) * n * (n + 1) / 2).reduce((a, b) => a + b, 0) > parseInt(charaData.charalevel) + 4) {
 			toast.error(`技のポイントの合計値が許容量(${parseInt(charaData.charalevel) + 4})を超過しています。`);
 			return;
 		}
@@ -479,7 +457,7 @@ function CharaCalc() {
 							キャラ計算機メニュー
 						</h1>
 						<h2 className="text-lg font-semibold text-center">
-							ver.6.0
+							ver.{version}
 						</h2>
 						<Separator className="my-2" />
 						<Accordion collapsible onValueChange={(v) => v && setNextMode(v)} value={mode} className="text-lg font-semibold">
@@ -517,105 +495,77 @@ function CharaCalc() {
 									キャラデータ
 								</AccordionTrigger>
 								<AccordionContent>
-									<div className="flex flex-col gap-2">
-										<div className="flex items-center">
-										</div>
-									</div>
-									<Table className="w-full">
-										<TableHeader>
-											<TableRow>
-												<TableHead className="w-1/3 text-center">項目</TableHead>
-												<TableHead className="w-2/3 text-left pl-10">値</TableHead>
-											</TableRow>
-										</TableHeader>
-										<TableBody>
-											<TableRow>
-												<TableCell className="px-2 py-1">
-													キャラ名
-												</TableCell>
-												<TableCell className="px-2 py-1 font-normal text-left pl-3">
-													{charaData.characterName || "未設定"}
-												</TableCell>
-											</TableRow>
-											<TableRow>
-												<TableCell className="px-2 py-1">
-													レベル
-												</TableCell>
-												<TableCell className="px-2 py-1 font-normal text-left pl-3">
-													{`${charaData.charalevel}${charaData.stars > 0 ? `☆${charaData.stars}` : ""}`}
-												</TableCell>
-											</TableRow>
-											<TableRow>
-												<TableCell className="px-2 py-1">
-													キャラタイプ
-												</TableCell>
-												<TableCell className="px-2 py-1 font-normal text-left pl-3">
-													{charaData.characterType === -1 ? "未設定" : jobs[charaData.characterType].charaname}
-												</TableCell>
-											</TableRow>
-											{
-												charaData.characterType !== -1 && (
+									{
+										charaData.charalevel + 4 < skillPoints.reduce((a, b) => a + b, 0)
+										? (
+											<p className="text-red-500 font-bold mb-2">
+												技のポイントの合計値が許容量({charaData.charalevel + 4})を超過しています。
+											</p>
+										)
+										: charaData.characterType === -1
+										? (
+											<p className="text-red-500 font-bold mb-2">
+												キャラクターのタイプを設定してください。
+											</p>
+										)
+										: 
+											<Table className="w-full">
+												<TableHeader>
 													<TableRow>
-														<TableCell className="px-2 py-1">
-															秘伝
-														</TableCell>
-														<TableCell className="px-2 py-1 font-normal text-left pl-3">
-															{
-																jobs[charaData.characterType].hiden[charaData.hiden]
-															}
+														<TableHead className="w-1/3 text-center">項目</TableHead>
+														<TableHead className="w-2/3 text-left pl-10">値</TableHead>
+													</TableRow>
+												</TableHeader>
+												<TableBody>
+													<TableRow>
+														<TableCell className="text-center">HP</TableCell>
+														<TableCell className="text-left pl-10">{status.HP}</TableCell>
+													</TableRow>
+													<TableRow>
+														<TableCell className="text-center">SP</TableCell>
+														<TableCell className="text-left pl-10">{status.SP / 5 + 200} ({status.SP * 0.15 + 150})/{status.SP}</TableCell>
+													</TableRow>
+													<TableRow>
+														<TableCell className="text-center">POW</TableCell>
+														<TableCell className="text-left pl-10">{status.pow}</TableCell>
+													</TableRow>
+													<TableRow>
+														<TableCell className="text-center">DEF</TableCell>
+														<TableCell className="text-left pl-10">{status.def}</TableCell>
+													</TableRow>
+													<TableRow>
+														<TableCell className="text-center">TEC</TableCell>
+														<TableCell className="text-left pl-10">{status.tec}</TableCell>
+													</TableRow>
+													<TableRow>
+														<TableCell className="text-center">攻速</TableCell>
+														<TableCell className="text-left pl-10">{status.as}</TableCell>
+													</TableRow>
+													<TableRow>
+														<TableCell className="text-center">移動</TableCell>
+														<TableCell className="text-left pl-10">{status.ms}</TableCell>
+													</TableRow>
+													<TableRow>
+														<TableCell className="text-center">√後POW</TableCell>
+														<TableCell className="text-left pl-10">
+															{Math.floor(Math.sqrt(status.pow))} (余り：{status.pow - Math.floor(Math.sqrt(status.pow)) ** 2})
 														</TableCell>
 													</TableRow>
-												)
-											}
-											<TableRow>
-												<TableCell className="px-2 py-1">
-													残りポイント
-												</TableCell>
-												<TableCell className="px-2 py-1 font-normal text-left pl-3">
-													{charaData.remain === -1 ? "未設定" : jobs[charaData.remain].jobname}
-												</TableCell>
-											</TableRow>
-											<TableRow>
-												<TableCell className="px-2 py-1">
-													武器
-												</TableCell>
-												<TableCell className="px-2 py-1 font-normal text-left pl-3">
-													{charaData.weapon === -1
-														? "未設定"
-														: (
-															<>
-																{weapons.find(w => w.id == charaData.weapon).name}{(charaData.weaponPowPlus || charaData.weaponDefPlus || charaData.weaponTecPlus) ? <>+{charaData.weaponPowPlus + charaData.weaponDefPlus + charaData.weaponTecPlus}</> : <></>}<br />
-																{charaData.weaponOption0 !== -1 ? (<span className="m-0.5 text-xs">[{options[0].find(o => o.id == charaData.weaponOption0).name}]</span>) : <span className="m-0.5 text-xs">---</span> }
-																{charaData.weaponOption1 !== -1 ? (<span className="m-0.5 text-xs">[{options[0].find(o => o.id == charaData.weaponOption1).name}]</span>) : <span className="m-0.5 text-xs">---</span> }
-																{charaData.weaponOption2 !== -1 ? (<span className="m-0.5 text-xs">[{options[0].find(o => o.id == charaData.weaponOption2).name}]</span>) : <span className="m-0.5 text-xs">---</span> }
-															</>
-														)
-													}
-												</TableCell>
-											</TableRow>
-											<TableRow>
-												<TableCell className="px-2 py-1">
-													護石
-												</TableCell>
-												<TableCell className="px-2 py-1 font-normal text-left pl-3">
-													{charaData.weaponOption3 !== -1 ? (<span className="m-0.5 text-xs">[{options[1].find(o => o.id == charaData.weaponOption3).name}]</span>) : <span className="m-0.5 text-xs">---</span> }
-													{charaData.weaponOption4 !== -1 ? (<span className="m-0.5 text-xs">[{options[1].find(o => o.id == charaData.weaponOption4).name}]</span>) : <span className="m-0.5 text-xs">---</span> }
-													{charaData.weaponOption5 !== -1 ? (<span className="m-0.5 text-xs">[{options[1].find(o => o.id == charaData.weaponOption5).name}]</span>) : <span className="m-0.5 text-xs">---</span> }
-												</TableCell>
-											</TableRow>
-											<TableRow>
-												<TableCell className="px-2 py-1">
-													ボーナス
-												</TableCell>
-												<TableCell className="px-2 py-1 font-normal text-left pl-3">
-													pow: {charaData.bonusPow}<br />
-													def: {charaData.bonusDef}<br />
-													tec: {charaData.bonusTec}<br />
-													合計: {charaData.bonusPow + charaData.bonusDef + charaData.bonusTec}
-												</TableCell>
-											</TableRow>
-										</TableBody>
-									</Table>
+													<TableRow>
+														<TableCell className="text-center">√後DEF</TableCell>
+														<TableCell className="text-left pl-10">
+															{Math.floor(Math.sqrt(status.def))} (余り：{status.def - Math.floor(Math.sqrt(status.def)) ** 2})
+														</TableCell>
+													</TableRow>
+													<TableRow>
+														<TableCell className="text-center">√後TEC</TableCell>
+														<TableCell className="text-left pl-10">
+															{Math.floor(Math.sqrt(status.tec))} (余り：{status.tec - Math.floor(Math.sqrt(status.tec)) ** 2})
+														</TableCell>
+													</TableRow>
+												</TableBody>
+											</Table>
+									}
 								</AccordionContent>
 							</AccordionItem>
 							<AccordionItem value="output">
@@ -1366,15 +1316,15 @@ function CharaCalc() {
 							/>
 						</div>
 						: mode == "other"
-						? <div>
+						? <div className="w-5/6 mx-auto">
 							<h2 className="text-xl m-3">その他</h2>
 							<h3>JSON取り込み</h3>
 							<Textarea
 								value={inputJson}
 								onChange={(e) => setInputJson(e.target.value)}
-								className="w-5/6 mx-auto h-20 resize-none"
+								className="w-2/3 left-1/2 -translate-x-1/2 h-45 resize-none absolute"
 							/>
-							<Button className="m-3" onClick={handleJsonImport}>取り込み</Button>
+							<Button className="relative top-50" onClick={handleJsonImport}>取り込み</Button>
 						</div> 
 						: <></>
 					}

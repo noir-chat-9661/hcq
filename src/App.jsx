@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import TopPage from "@/components/TopPage";
 import CharaCalc from "@/components/CharaCalc";
 import AnalysisScript from "@/components/AnalysisScript";
+import CharaData from "@/components/CharaData";
 import Page404 from "@/components/Page404";
 import { useState, useEffect } from "react";
 import { Loader } from "lucide-react";
@@ -14,10 +15,6 @@ function App() {
 		const path = sessionStorage.getItem("path");
 		if (path) {
 			sessionStorage.removeItem("path");
-			if (path === "/chara_calc") 
-				navigate("/characalc");
-			else
-				navigate(path);
 			navigate(path);
 		}
 		setLoading(false);
@@ -35,6 +32,7 @@ function App() {
 						<Route path="/" element={<TopPage />} />
 						<Route path="/characalc" element={<CharaCalc />} />
 						<Route path="/analysis" element={<AnalysisScript />} />
+						<Route path="/charadata/:recipeId" element={<CharaData />} />
 						<Route path="*" element={<Page404 />} />
 					</Routes>
 				)

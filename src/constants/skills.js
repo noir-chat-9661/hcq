@@ -5,7 +5,7 @@ export const skills = [
 		name: "ノルアドレナリン",
 		short_name: "NA",
 		level: 0,
-		id:  0,
+		id: 0,
 		point: 0,
 		isDefault: false,
 		description: [
@@ -90,7 +90,7 @@ export const skills = [
 		name: "シールドアタック",
 		short_name: "汁",
 		level: 0,
-		id:  1,
+		id: 1,
 		point: 0,
 		isDefault: false,
 		description: [
@@ -211,7 +211,7 @@ export const skills = [
 		name: "ブロードスラッシュ",
 		short_name: "B",
 		level: 0,
-		id:  2,
+		id: 2,
 		point: 1,
 		isDefault: true,
 		description: [
@@ -296,7 +296,7 @@ export const skills = [
 		name: "連撃",
 		short_name: "連撃",
 		level: 0,
-		id:  3,
+		id: 3,
 		point: 1,
 		isDefault: false,
 		description: [
@@ -411,7 +411,7 @@ export const skills = [
 		name: "神速",
 		short_name: "神速",
 		level: 0,
-		id:  4,
+		id: 4,
 		point: 2,
 		isDefault: false,
 		description: [
@@ -502,7 +502,7 @@ export const skills = [
 		name: "ウォークライ",
 		short_name: "ヲクラ",
 		level: 0,
-		id:  5,
+		id: 5,
 		point: 2,
 		isDefault: false,
 		description: [
@@ -617,7 +617,7 @@ export const skills = [
 		name: "岩投げ",
 		short_name: "岩",
 		level: 0,
-		id:  6,
+		id: 6,
 		point: 2,
 		isDefault: false,
 		description: [
@@ -714,7 +714,7 @@ export const skills = [
 		name: "アンチマジック",
 		short_name: "アンチマ",
 		level: 0,
-		id:  7,
+		id: 7,
 		point: 0,
 		isDefault: false,
 		description: [
@@ -811,7 +811,7 @@ export const skills = [
 		name: "テレポート",
 		short_name: "テレポ",
 		level: 0,
-		id:  8,
+		id: 8,
 		point: 0,
 		isDefault: false,
 		description: [
@@ -860,7 +860,7 @@ export const skills = [
 		name: "ビーム",
 		short_name: "ビーム",
 		level: 0,
-		id:  9,
+		id: 9,
 		point: 1,
 		isDefault: false,
 		description: [
@@ -951,7 +951,7 @@ export const skills = [
 		name: "サンダーボルト",
 		short_name: "雷",
 		level: 0,
-		id:  10,
+		id: 10,
 		point: 1,
 		isDefault: true,
 		description: [
@@ -1072,7 +1072,7 @@ export const skills = [
 		name: "ヴォルテックス",
 		short_name: "渦",
 		level: 0,
-		id:  11,
+		id: 11,
 		point: 1,
 		isDefault: false,
 		description: [
@@ -1187,7 +1187,7 @@ export const skills = [
 		name: "メテオスフォール",
 		short_name: "メテオ",
 		level: 0,
-		id:  12,
+		id: 12,
 		point: 2,
 		isDefault: false,
 		description: [
@@ -1290,7 +1290,7 @@ export const skills = [
 		name: "マジカルチャージ",
 		short_name: "茶",
 		level: 0,
-		id:  13,
+		id: 13,
 		point: 2,
 		isDefault: false,
 		description: [
@@ -1375,7 +1375,7 @@ export const skills = [
 		name: "スーパーゼロ",
 		short_name: "ゼロ",
 		level: 0,
-		id:  14,
+		id: 14,
 		point: 2,
 		isDefault: false,
 		description: [
@@ -1472,7 +1472,7 @@ export const skills = [
 		name: "退魔の防壁",
 		short_name: "防壁",
 		level: 0,
-		id:  15,
+		id: 15,
 		point: 0,
 		isDefault: false,
 		description: [
@@ -1563,7 +1563,7 @@ export const skills = [
 		name: "魔滅の札",
 		short_name: "札",
 		level: 0,
-		id:  16,
+		id: 16,
 		point: 0,
 		isDefault: false,
 		description: [
@@ -1684,7 +1684,7 @@ export const skills = [
 		name: "ドレイン",
 		short_name: "ドレイン",
 		level: 0,
-		id:  17,
+		id: 17,
 		point: 0,
 		isDefault: false,
 		description: [
@@ -1811,7 +1811,7 @@ export const skills = [
 		name: "ヒーリングスポット",
 		short_name: "ヒスポ",
 		level: 0,
-		id:  18,
+		id: 18,
 		point: 1,
 		isDefault: true,
 		description: [
@@ -1896,7 +1896,7 @@ export const skills = [
 		name: "超免疫",
 		short_name: "免疫",
 		level: 0,
-		id:  19,
+		id: 19,
 		point: 1,
 		isDefault: false,
 		description: [
@@ -2017,7 +2017,7 @@ export const skills = [
 		name: "エナジーヒール",
 		short_name: "エナヒ",
 		level: 0,
-		id:  20,
+		id: 20,
 		point: 2,
 		isDefault: false,
 		description: [
@@ -2150,7 +2150,7 @@ export const skills = [
 		name: "救援の光",
 		short_name: "光",
 		level: 0,
-		id:  21,
+		id: 21,
 		point: 2,
 		isDefault: false,
 		description: [
@@ -2265,7 +2265,7 @@ export const skills = [
 		name: "隠れ身の術",
 		short_name: "隠れ",
 		level: 0,
-		id:  22,
+		id: 22,
 		point: 0,
 		isDefault: false,
 		description: [
@@ -2356,7 +2356,7 @@ export const skills = [
 		name: "分身の術",
 		short_name: "分身",
 		level: 0,
-		id:  23,
+		id: 23,
 		point: 0,
 		isDefault: false,
 		description: [
@@ -2447,7 +2447,7 @@ export const skills = [
 		name: "風遁の術",
 		short_name: "風",
 		level: 0,
-		id:  24,
+		id: 24,
 		point: 1,
 		isDefault: false,
 		description: [
@@ -2544,7 +2544,7 @@ export const skills = [
 		name: "影縫いの術",
 		short_name: "影",
 		level: 0,
-		id:  25,
+		id: 25,
 		point: 1,
 		isDefault: true,
 		description: [
@@ -2641,7 +2641,7 @@ export const skills = [
 		name: "煙幕の術",
 		short_name: "墨",
 		level: 0,
-		id:  26,
+		id: 26,
 		point: 2,
 		isDefault: false,
 		description: [
@@ -2738,7 +2738,7 @@ export const skills = [
 		name: "火柱の罠",
 		short_name: "火柱",
 		level: 0,
-		id:  27,
+		id: 27,
 		point: 2,
 		isDefault: false,
 		description: [
@@ -2847,7 +2847,7 @@ export const skills = [
 		name: "毒の罠",
 		short_name: "毒",
 		level: 0,
-		id:  28,
+		id: 28,
 		point: 2,
 		isDefault: false,
 		description: [
@@ -2956,7 +2956,7 @@ export const skills = [
 		name: "アロマテーション",
 		short_name: "アロマ",
 		level: 0,
-		id:  29,
+		id: 29,
 		point: 0,
 		isDefault: true,
 		description: [
@@ -3053,7 +3053,7 @@ export const skills = [
 		name: "ディッシュツイスト",
 		short_name: "皿",
 		level: 0,
-		id:  30,
+		id: 30,
 		point: 0,
 		isDefault: false,
 		description: [
@@ -3138,7 +3138,7 @@ export const skills = [
 		name: "メタルコーティング",
 		short_name: "メタコ",
 		level: 0,
-		id:  31,
+		id: 31,
 		point: 0,
 		isDefault: false,
 		description: [
@@ -3259,7 +3259,7 @@ export const skills = [
 		name: "コンセントレーション",
 		short_name: "集中",
 		level: 0,
-		id:  32,
+		id: 32,
 		point: 1,
 		isDefault: false,
 		description: [
@@ -3344,7 +3344,7 @@ export const skills = [
 		name: "地獄の薔薇",
 		short_name: "薔薇",
 		level: 0,
-		id:  33,
+		id: 33,
 		point: 1,
 		isDefault: false,
 		description: [
@@ -3447,7 +3447,7 @@ export const skills = [
 		name: "ミスティックナイフ",
 		short_name: "ナイフ",
 		level: 0,
-		id:  34,
+		id: 34,
 		point: 1,
 		isDefault: false,
 		description: [
@@ -3532,7 +3532,7 @@ export const skills = [
 		name: "ボムパーティ",
 		short_name: "ボムパ",
 		level: 0,
-		id:  35,
+		id: 35,
 		point: 2,
 		isDefault: false,
 		description: [
@@ -3629,7 +3629,7 @@ export const skills = [
 		name: "天使の羽",
 		short_name: "羽",
 		level: 0,
-		id:  36,
+		id: 36,
 		point: 2,
 		isDefault: false,
 		description: [
@@ -3720,7 +3720,7 @@ export const skills = [
 		name: "即席バリア",
 		short_name: "バリア",
 		level: 0,
-		id:  37,
+		id: 37,
 		point: 0,
 		isDefault: false,
 		description: [
@@ -3811,7 +3811,7 @@ export const skills = [
 		name: "気合の一撃",
 		short_name: "気合",
 		level: 0,
-		id:  38,
+		id: 38,
 		point: 0,
 		isDefault: false,
 		description: [
@@ -3902,7 +3902,7 @@ export const skills = [
 		name: "ド根性",
 		short_name: "根性",
 		level: 0,
-		id:  39,
+		id: 39,
 		point: 0,
 		isDefault: false,
 		description: [
@@ -4041,7 +4041,7 @@ export const skills = [
 		name: "アクセルレーション",
 		short_name: "アクセル",
 		level: 0,
-		id:  40,
+		id: 40,
 		point: 0,
 		isDefault: false,
 		description: [
@@ -4102,7 +4102,7 @@ export const skills = [
 		name: "生兵法",
 		short_name: "生兵",
 		level: 0,
-		id:  41,
+		id: 41,
 		point: 1,
 		isDefault: false,
 		description: [
@@ -4181,7 +4181,7 @@ export const skills = [
 		name: "地鎮祭",
 		short_name: "祭",
 		level: 0,
-		id:  42,
+		id: 42,
 		point: 1,
 		isDefault: false,
 		description: [
@@ -4278,7 +4278,7 @@ export const skills = [
 		name: "ビッグランス",
 		short_name: "ランス",
 		level: 0,
-		id:  43,
+		id: 43,
 		point: 2,
 		isDefault: true,
 		description: [
@@ -4369,7 +4369,7 @@ export const skills = [
 		name: "諸天善神の鏡",
 		short_name: "諸天",
 		level: 0,
-		id:  44,
+		id: 44,
 		point: 2,
 		isDefault: false,
 		description: [
@@ -4466,7 +4466,7 @@ export const skills = [
 		name: "ブレイブヒート",
 		short_name: "ブレヒ",
 		level: 0,
-		id:  45,
+		id: 45,
 		point: 1,
 		isDefault: false,
 		description: [
@@ -4599,7 +4599,7 @@ export const skills = [
 		name: "ザコイチ召喚",
 		short_name: "ザコ",
 		level: 0,
-		id:  46,
+		id: 46,
 		point: 0,
 		isDefault: true,
 		description: {
@@ -4628,7 +4628,7 @@ export const skills = [
 		name: "守護霊召喚",
 		short_name: "霊",
 		level: 0,
-		id:  47,
+		id: 47,
 		point: 0,
 		isDefault: false,
 		description: {
@@ -4657,7 +4657,7 @@ export const skills = [
 		name: "パワーストーン召喚",
 		short_name: "石",
 		level: 0,
-		id:  48,
+		id: 48,
 		point: 0,
 		isDefault: false,
 		description: {
@@ -4687,7 +4687,7 @@ export const skills = [
 		name: "ニョロニョロ召喚",
 		short_name: "ニョロ",
 		level: 0,
-		id:  49,
+		id: 49,
 		point: 1,
 		isDefault: false,
 		description: {
@@ -4716,7 +4716,7 @@ export const skills = [
 		name: "薬オネ召喚",
 		short_name: "薬",
 		level: 0,
-		id:  50,
+		id: 50,
 		point: 1,
 		isDefault: false,
 		description: {
@@ -4746,7 +4746,7 @@ export const skills = [
 		name: "狐火召喚",
 		short_name: "狐",
 		level: 0,
-		id:  51,
+		id: 51,
 		point: 1,
 		isDefault: false,
 		description: {
@@ -4776,7 +4776,7 @@ export const skills = [
 		name: "ロボット召喚",
 		short_name: "ロボ",
 		level: 0,
-		id:  52,
+		id: 52,
 		point: 2,
 		isDefault: false,
 		description: {
@@ -4805,7 +4805,7 @@ export const skills = [
 		name: "アウグトゥス召喚",
 		short_name: "アウグ",
 		level: 0,
-		id:  53,
+		id: 53,
 		point: 2,
 		isDefault: false,
 		description: {
@@ -4837,7 +4837,7 @@ export const skills = [
 		name: "赤鬼召喚",
 		short_name: "鬼",
 		level: 0,
-		id:  54,
+		id: 54,
 		point: 2,
 		isDefault: false,
 		description: {
@@ -4866,7 +4866,7 @@ export const skills = [
 		name: "アカオネ召喚",
 		short_name: "アカオネ",
 		level: 0,
-		id:  55,
+		id: 55,
 		point: 1,
 		isDefault: false,
 		description: {
@@ -4895,7 +4895,7 @@ export const skills = [
 		name: "ビリビリ召喚",
 		short_name: "ビリ",
 		level: 0,
-		id:  56,
+		id: 56,
 		point: 1,
 		isDefault: false,
 		description: {
