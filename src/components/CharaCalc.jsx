@@ -156,8 +156,8 @@ function CharaCalc() {
 					}
 					d[key] = v;
 				});
-				setCharaData(d);
 				toast.success("IDからレシピを取得しました。");
+				setCharaData(d);
 			} catch {
 				toast.error("レシピの取得に失敗しました。");
 			}

@@ -217,8 +217,8 @@ function CharaData () {
 							</AccordionContent>
 						</AccordionItem>
 					</Accordion>
-					<Button className="m-1 h-10 p-3 w-50">
-						<Link to={"/characalc/" + recipeId}>
+					<Button className="m-1 h-10 p-3 w-50" onClick={() => sessionStorage.setItem("recipeId", recipeId)}>
+						<Link to="/characalc">
 							キャラ計算機を開く
 						</Link>
 					</Button>
