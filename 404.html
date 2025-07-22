@@ -17,6 +17,11 @@
 					sessionStorage.setItem("recipeId", recipeId);
 					path = "/characalc";
 				}
+				if (path.match(/^\/charadata\/[a-zA-Z0-9]+/)) {
+					const recipeId = path.split("/")[2];
+					sessionStorage.setItem("recipeId", recipeId);
+					path = "/charadata";
+				}
 				sessionStorage.setItem("path", path);
 				location.replace("/");
 			})();
