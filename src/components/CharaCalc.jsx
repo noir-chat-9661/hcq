@@ -41,6 +41,7 @@ import { jobs, weapons, options, skills, defaultCharaData, charaDataTypes } from
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useCalc } from "@/hooks/use-calc";
+import { cn } from "@/lib/utils";
 
 const version = "6.1.0";
 
@@ -53,6 +54,8 @@ function CharaCalc() {
 	const [skillPoints, setSkillPoints] = useState(new Array(jobs.length).fill(0));
 	const [currentShowJobId, setCurrentShowJobId] = useState(0);
 	const [skillData, setSkillData] = useState(skills);
+	const [showSkillDescription, setShowSkillDescription] = useState(false);
+	const [skillDescription, setSkillDescription] = useState([]);
 	const [isWeaponMenuOpen, setWeaponMenuOpen] = useState(false);
 	const [isWeaponOption0MenuOpen, setWeaponOption0MenuOpen] = useState(false);
 	const [isWeaponOption1MenuOpen, setWeaponOption1MenuOpen] = useState(false);
@@ -62,6 +65,8 @@ function CharaCalc() {
 	const [isWeaponOption5MenuOpen, setWeaponOption5MenuOpen] = useState(false);
 	const [showAllWeapons, setShowAllWeapons] = useState(false);
 	const [showAllOptions, setShowAllOptions] = useState(false);
+	const [attribute, setAttribute] = useState(-1);
+	const [disattribute, setDisattribute] = useState(-1);
 	const [output, setOutput] = useState(["", "", ""]);
 	const [outputError, setOutputError] = useState(false);
 	const [outputContent, setOutputContent] = useState({
@@ -168,6 +173,114 @@ function CharaCalc() {
 			fetchRecipe(id);
 		}
 	}, []);
+	
+	useEffect(() => {
+		let attribute = -1, disattribute = -1;
+		// タイプ：[物理, 魔法, 回復, 妨害, 補助, 召喚]
+		switch (charaData.characterType) {
+			case 0:
+				attribute = 0;
+				disattribute = 2;
+				break;
+			case 1:
+				attribute = 1;
+				disattribute = 0;
+				break;
+			case 2:
+				attribute = 2;
+				disattribute = 3;
+				break;
+			case 3:
+				attribute = 3;
+				disattribute = 2;
+				break;
+			case 4:
+				attribute = 4;
+				disattribute = 3;
+				break;
+			case 5:
+				attribute = 0;
+				disattribute = 1;
+				break;
+			case 6:
+				attribute = 5;
+				disattribute = 0;
+				break;
+		}
+		switch (charaData.weapon) {
+			case 39:
+				attribute = disattribute == 0 ? -1 : 0;
+				disattribute = disattribute == 0 ? -1 : disattribute;
+				break;
+			case 40:
+				attribute = disattribute == 1 ? -1 : 1;
+				disattribute = disattribute == 1 ? -1 : disattribute;
+				break;
+			case 41:
+				attribute = disattribute == 5 ? -1 : 5;
+				disattribute = disattribute == 5 ? -1 : disattribute;
+				break;
+			case 44:
+				attribute = disattribute == 3 ? -1 : 3;
+				disattribute = disattribute == 3 ? -1 : disattribute;
+				break;
+			case 45:
+				attribute = disattribute == 2 ? -1 : 2;
+				disattribute = disattribute == 2 ? -1 : disattribute;
+				break;
+			case 46:
+				attribute = disattribute == 4 ? -1 : 4;
+				disattribute = disattribute == 4 ? -1 : disattribute;
+				break;
+		}
+		setAttribute(attribute);
+		setDisattribute(disattribute);
+	}, [charaData])
+
+	useEffect(() => {
+		if (currentSkill === null) return setSkillDescription([]);
+		const s = skillData.find(skill => skill.id === currentSkill);
+		if (Array.isArray(s.description)) {
+			const d = [...s.description[s.level]];
+			d[2] = "[得意]" + d[2];
+			d[3] = "[苦手]" + d[3];
+			d.splice(4, 0, "");
+			setSkillDescription(
+				d.map(n => typeof n == "object"
+					? s.type == attribute ? n[2] : s.type == disattribute ? n[0] : n[1]
+					: n
+				)
+			)
+		} else {
+			const d = s.description;
+			if (s.level == 0) {
+				setSkillDescription([
+					`SP:${d.SP}`,
+					`タイプ:召喚`,
+					`ステータス(lv200): HP ${d.HP * 200 * (s.type == attribute ? 1.2 : 1)} POW ${d.pow * 200 * (s.type == attribute ? 1.2 : 1)} DEF ${d.def * 200 * (s.type == attribute ? 1.2 : 1)} TEC ${d.tec * 200 * (s.type == attribute ? 1.2 : 1)}`,
+					"",
+					...d.description
+				]);
+			} else {
+				let l = charaData.charalevel + charaData.stars * 7 + d.compensation[s.level - 1]
+				if (l < 1) l = 1;
+				const status = {...d};
+				delete status.compensation;
+				delete status.description;
+				delete status.SP;
+				Object.keys(status).forEach(k => status[k] = Math.floor(status[k] * l));
+				if (s.type == attribute) Object.keys(status).forEach(k => status[k] = Math.floor(status[k] * 1.2));
+				setSkillDescription([
+					`SP:${s.description.SP}`,
+					`タイプ:召喚`,
+					`ステータス(lv${l}): HP ${status.HP} POW ${status.pow} DEF ${status.def} TEC ${status.tec}`,
+					"",
+					...d.description
+				]);
+			}
+		}
+		setShowSkillDescription(true);
+	}, [currentSkill])
 
 	const setCharacterData = (k, v, a = false) => {
 		if (!(k in charaData)) return;
@@ -273,8 +386,6 @@ function CharaCalc() {
 		setCharaData(d);
 		setStatus((d.charalevel + 4 < skillPoints.reduce((a, b) => a + b, 0) || d.characterType == -1) ? {} : calcStatus(s, d));
 	}
-
-	
 
 	const calc = () => {
 		if (charaData.charalevel + 4 < skillPoints.reduce((a, b) => a + b, 0)) {
@@ -446,7 +557,7 @@ function CharaCalc() {
 		});
 		setCharaData(d);
 		toast.success("JSONのインポートに成功しました。");
-	}
+	}	
 
 	return (
 		<div className="fixed top-0 left-0 w-full h-full bg-cyan-100 m-0 p-5 overflow-y-auto">
@@ -685,6 +796,29 @@ function CharaCalc() {
 								}
 							</div>
 							<Separator className="my-2" />
+							<Dialog open={showSkillDescription} onOpenChange={(open) => {
+								if (!open) {
+									setShowSkillDescription(false);
+									setSkillDescription([]);
+									setCurrentSkill(null);
+								}
+							}}>
+								<DialogContent>
+									<DialogHeader>
+										<DialogTitle className="text-2xl text-center">
+											{
+												(skillData.find(s => s.id == currentSkill)?.name ?? (showSkillDescription ? "不明な技" : "")) + 
+												["", "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ"][skillData.find(s => s.id == currentSkill)?.level ?? 0]
+											}
+										</DialogTitle>
+										<DialogDescription className="text-lg text-center">
+											{skillDescription.map(
+												d => d ? (<>{d}<br /></>) : <br />
+											)}
+										</DialogDescription>
+									</DialogHeader>
+								</DialogContent>
+							</Dialog>
 							<Table className="w-5/6 mx-auto">
 								<TableHeader>
 									<TableRow>
@@ -703,7 +837,7 @@ function CharaCalc() {
 												key={"skill-" + skill.id}
 												className={`cursor-pointer`}
 											>
-												<TableCell className="px-2 py-1" onClick={() => setCurrentSkill(skill.id)}>{skill.name}</TableCell>
+												<TableCell className={cn("px-2 py-1", skill.type == attribute ? "text-red-600" : skill.type == disattribute && "text-purple-600")} onClick={() => setCurrentSkill(skill.id)}>{skill.name}</TableCell>
 												<TableCell className="px-2 py-1">
 													{levels[skill.level]}
 												</TableCell>

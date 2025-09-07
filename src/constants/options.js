@@ -174,7 +174,7 @@ export const options = [
 			name: "最大ＳＰ１",
 			addstatus: [
 				{
-					type: "sp",
+					type: "SP",
 					value: 100,
 				},
 			],
@@ -185,7 +185,7 @@ export const options = [
 			name: "最大ＳＰ２",
 			addstatus: [
 				{
-					type: "sp",
+					type: "SP",
 					value: 200,
 				},
 			],
@@ -196,7 +196,7 @@ export const options = [
 			name: "最大ＳＰ３",
 			addstatus: [
 				{
-					type: "sp",
+					type: "SP",
 					value: 300,
 				},
 			],
@@ -207,7 +207,7 @@ export const options = [
 			name: "最大ＳＰ４",
 			addstatus: [
 				{
-					type: "sp",
+					type: "SP",
 					value: 500,
 				},
 			],
@@ -218,7 +218,7 @@ export const options = [
 			name: "最大ＳＰ５",
 			addstatus: [
 				{
-					type: "sp",
+					type: "SP",
 					value: 1000,
 				},
 			],
@@ -682,7 +682,7 @@ export const options = [
 			name: "最大ＳＰ１",
 			addstatus: [
 				{
-					type: "sp",
+					type: "SP",
 					value: 100,
 				},
 			],
@@ -693,7 +693,7 @@ export const options = [
 			name: "最大ＳＰ２",
 			addstatus: [
 				{
-					type: "sp",
+					type: "SP",
 					value: 200,
 				},
 			],
@@ -704,7 +704,7 @@ export const options = [
 			name: "最大ＳＰ３",
 			addstatus: [
 				{
-					type: "sp",
+					type: "SP",
 					value: 300,
 				},
 			],
@@ -715,7 +715,7 @@ export const options = [
 			name: "最大ＳＰ４",
 			addstatus: [
 				{
-					type: "sp",
+					type: "SP",
 					value: 500,
 				},
 			],
