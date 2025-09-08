@@ -1305,7 +1305,7 @@ function CharaCalc() {
 					</SidebarContent>
 					<SidebarFooter />
 				</Sidebar>
-				<SidebarInset className="w-full m-0 pt-1 px-3 pb-3 bg-cyan-50 pointer-events-auto">
+				<SidebarInset className="w-full m-0 pt-1 px-3 pb-3 bg-cyan-50">
 					<Toaster
 						richColors
 						position="top-right"
