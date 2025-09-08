@@ -1024,12 +1024,9 @@ function CharaCalc() {
 
 	return (
 		<div className="fixed top-0 left-0 w-full h-full bg-cyan-100 m-0 p-5 overflow-y-auto">
-			<SidebarProvider
-				className="min-h-full pointer-events-none"
-				defaultOpen={false}
-			>
-				<Sidebar className="w-64 shadow-lg pointer-events-none">
-					<SidebarContent className="flex flex-col gap-4 p-4 bg-cyan-50 pointer-events-auto">
+			<SidebarProvider className="min-h-full" defaultOpen={false}>
+				<Sidebar className="w-64 shadow-lg">
+					<SidebarContent className="flex flex-col gap-4 p-4 bg-cyan-50">
 						<h1 className="text-xl font-bold mb-4 text-center">
 							キャラ計算機メニュー
 						</h1>
