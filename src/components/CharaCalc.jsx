@@ -1029,7 +1029,7 @@ function CharaCalc() {
 				defaultOpen={false}
 			>
 				<Sidebar className="w-64 shadow-lg pointer-events-none">
-					<SidebarContent className="flex flex-col gap-4 p-4 bg-cyan-50 pointer-events-auto z-[100]">
+					<SidebarContent className="flex flex-col gap-4 p-4 bg-cyan-50 pointer-events-auto">
 						<h1 className="text-xl font-bold mb-4 text-center">
 							キャラ計算機メニュー
 						</h1>
